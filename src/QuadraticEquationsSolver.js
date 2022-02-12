@@ -4,10 +4,25 @@ import PromptSync from 'prompt-sync';
 const prompt = PromptSync({ sigint: true });
 
 class QuadraticEquationsSolver {
+  mode = MODES.INTERACTIVE;
+  filePath = '';
   inputValues = { a: '', b: '', c: '' };
-  mode = MODES.FILE;
+  roots = [];
 
-  constructor() {}
+  constructor() {
+    if (process.argv.slice(2).length > 0) {
+      this.setMode(MODES.FILE);
+      this.setFilePath(process.argv.slice(2)[0]);
+    }
+  }
+
+  setMode(mode) {
+    this.mode = mode;
+  }
+
+  setFilePath(path) {
+    this.filePath = path;
+  }
 
   setInputValues(inputValues) {
     this.inputValues = inputValues;
@@ -92,8 +107,10 @@ class QuadraticEquationsSolver {
     }
     if (this.mode === MODES.FILE) {
       try {
-        await this.getValuesFromFile('src/test.txt');
-        console.log(this.inputValues);
+        await this.getValuesFromFile(this.filePath);
+        this.showEquation();
+        this.findRoots();
+        this.logResult();
       } catch (err) {
         console.log(err.message);
       }
