@@ -95,25 +95,33 @@ class QuadraticEquationsSolver {
     }
   }
 
-  async start() {
-    if (this.mode === MODES.INTERACTIVE) {
-      const a = this.askForValue('a', (value) => Number(value) !== 0);
-      const b = this.askForValue('b');
-      const c = this.askForValue('c');
-      this.setInputValues({ a, b, c });
+  runInteractiveMode() {
+    const a = this.askForValue('a', (value) => Number(value) !== 0);
+    const b = this.askForValue('b');
+    const c = this.askForValue('c');
+    this.setInputValues({ a, b, c });
+    this.showEquation();
+    this.findRoots();
+    this.logResult();
+  }
+
+  async runFileMode() {
+    try {
+      await this.getValuesFromFile(this.filePath);
       this.showEquation();
       this.findRoots();
       this.logResult();
+    } catch (err) {
+      console.log(err.message);
+    }
+  }
+
+  start() {
+    if (this.mode === MODES.INTERACTIVE) {
+      this.runInteractiveMode();
     }
     if (this.mode === MODES.FILE) {
-      try {
-        await this.getValuesFromFile(this.filePath);
-        this.showEquation();
-        this.findRoots();
-        this.logResult();
-      } catch (err) {
-        console.log(err.message);
-      }
+      this.runFileMode();
     }
   }
 }
