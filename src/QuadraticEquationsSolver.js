@@ -1,9 +1,11 @@
 import { MODES } from './constants.js';
+import fs from 'fs/promises';
 import PromptSync from 'prompt-sync';
 const prompt = PromptSync({ sigint: true });
 
 class QuadraticEquationsSolver {
   inputValues = { a: '', b: '', c: '' };
+  mode = MODES.FILE;
 
   constructor() {}
 
@@ -42,6 +44,12 @@ class QuadraticEquationsSolver {
     }
   }
 
+  async getValuesFromFile(path) {
+    const content = await fs.readFile(path, 'utf-8');
+    const [a, b, c] = content.split(' ').map((number) => Number(number));
+    this.setInputValues({ a, b, c });
+  }
+
   showEquation() {
     const { a, b, c } = this.inputValues;
     console.log(`Equation is: (${a}) x^2 + (${b}) x + (${c}) = 0`);
@@ -64,14 +72,20 @@ class QuadraticEquationsSolver {
     }
   }
 
-  start() {
-    const a = this.askForValue('a', (value) => Number(value) !== 0);
-    const b = this.askForValue('b');
-    const c = this.askForValue('c');
-    this.setInputValues({ a, b, c });
-    this.showEquation();
-    this.findRoots();
-    this.logResult();
+  async start() {
+    if (this.mode === MODES.INTERACTIVE) {
+      const a = this.askForValue('a', (value) => Number(value) !== 0);
+      const b = this.askForValue('b');
+      const c = this.askForValue('c');
+      this.setInputValues({ a, b, c });
+      this.showEquation();
+      this.findRoots();
+      this.logResult();
+    }
+    if (this.mode === MODES.FILE) {
+      await this.getValuesFromFile('src/test.txt');
+      console.log(this.inputValues);
+    }
   }
 }
 
