@@ -6,6 +6,10 @@ class QuadraticEquationsSolver {
 
   constructor() {}
 
+  setInputValues(inputValues) {
+    this.inputValues = inputValues;
+  }
+
   findRoots() {
     const roots = [];
     const { a, b, c } = this.inputValues;
@@ -33,10 +37,17 @@ class QuadraticEquationsSolver {
     }
   }
 
+  showEquation() {
+    const { a, b, c } = this.inputValues;
+    console.log(`Equation is: (${a}) x^2 + (${b}) x + (${c}) = 0`);
+  }
+
   start() {
     const a = this.askForValue('a', (value) => Number(value) !== 0);
     const b = this.askForValue('b');
     const c = this.askForValue('c');
+    this.setInputValues({ a, b, c });
+    this.showEquation();
     console.log({ a, b, c });
   }
 }
