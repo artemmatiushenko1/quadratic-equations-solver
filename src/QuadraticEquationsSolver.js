@@ -1,3 +1,6 @@
+import PromptSync from 'prompt-sync';
+const prompt = PromptSync({ sigint: true });
+
 class QuadraticEquationsSolver {
   inputValues = { a: '', b: '', c: '' };
 
@@ -19,4 +22,17 @@ class QuadraticEquationsSolver {
     }
     return roots;
   }
+
+  askForValue(valueName) {
+    const value = prompt(`${valueName} = `);
+    return Number(value);
+  }
+
+  start() {
+    const b = this.askForValue('b');
+    console.log(b);
+  }
 }
+
+const quadraticEquationsSolver = new QuadraticEquationsSolver();
+quadraticEquationsSolver.start();
