@@ -10,6 +10,10 @@ class QuadraticEquationsSolver {
     this.inputValues = inputValues;
   }
 
+  setRoots(roots) {
+    this.roots = roots;
+  }
+
   findRoots() {
     const roots = [];
     const { a, b, c } = this.inputValues;
@@ -24,7 +28,7 @@ class QuadraticEquationsSolver {
       const x2 = (-b + discriminantSqrt) / (2 * a);
       roots.push(x1, x2);
     }
-    return roots;
+    this.setRoots(roots);
   }
 
   askForValue(valueName, extraValidationRule = () => true) {
@@ -42,13 +46,31 @@ class QuadraticEquationsSolver {
     console.log(`Equation is: (${a}) x^2 + (${b}) x + (${c}) = 0`);
   }
 
+  logResult() {
+    const numberOfRoots = this.roots.length;
+    if (numberOfRoots === 1) {
+      console.log(
+        `There is only ${numberOfRoots} root: \nx1 = ${this.roots[0]}`
+      );
+    }
+    if (numberOfRoots > 1) {
+      console.log(
+        `There are ${numberOfRoots} roots: \nx1 = ${this.roots[0]} \nx2 = ${this.roots[1]}`
+      );
+    }
+    if (numberOfRoots === 0) {
+      console.log('No roots found.');
+    }
+  }
+
   start() {
     const a = this.askForValue('a', (value) => Number(value) !== 0);
     const b = this.askForValue('b');
     const c = this.askForValue('c');
     this.setInputValues({ a, b, c });
     this.showEquation();
-    console.log({ a, b, c });
+    this.findRoots();
+    this.logResult();
   }
 }
 
