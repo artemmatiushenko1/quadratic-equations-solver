@@ -23,14 +23,21 @@ class QuadraticEquationsSolver {
     return roots;
   }
 
-  askForValue(valueName) {
-    const value = prompt(`${valueName} = `);
-    return Number(value);
+  askForValue(valueName, extraValidationRule = () => true) {
+    while (true) {
+      const value = prompt(`${valueName} = `);
+      if (value !== '' && !isNaN(Number(value)) && extraValidationRule(value)) {
+        return Number(value);
+      }
+      console.log(`Expected a valid real number, got ${value} instead`);
+    }
   }
 
   start() {
+    const a = this.askForValue('a', (value) => Number(value) !== 0);
     const b = this.askForValue('b');
-    console.log(b);
+    const c = this.askForValue('c');
+    console.log({ a, b, c });
   }
 }
 
