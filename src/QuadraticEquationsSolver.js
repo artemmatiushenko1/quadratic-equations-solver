@@ -45,8 +45,16 @@ class QuadraticEquationsSolver {
   }
 
   async getValuesFromFile(path) {
+    const pattern = /^(-?\d*\.?\d*\s){2}-?\d*\.?\d*\n$/g;
     const content = await fs.readFile(path, 'utf-8');
-    const [a, b, c] = content.split(' ').map((number) => Number(number));
+    if (!pattern.test(content)) {
+      throw new Error('Invalid file format!');
+    }
+    const values = content.split(' ').map((number) => Number(number));
+    if (values[0] === 0) {
+      throw new Error('Error! a cannot be 0');
+    }
+    const [a, b, c] = values;
     this.setInputValues({ a, b, c });
   }
 
@@ -83,8 +91,12 @@ class QuadraticEquationsSolver {
       this.logResult();
     }
     if (this.mode === MODES.FILE) {
-      await this.getValuesFromFile('src/test.txt');
-      console.log(this.inputValues);
+      try {
+        await this.getValuesFromFile('src/test.txt');
+        console.log(this.inputValues);
+      } catch (err) {
+        console.log(err.message);
+      }
     }
   }
 }
