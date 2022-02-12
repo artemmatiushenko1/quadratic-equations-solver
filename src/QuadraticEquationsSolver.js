@@ -18,10 +18,6 @@ class QuadraticEquationsSolver {
 
   setMode(mode) {
     this.mode = mode;
-
-    while (true) {
-      console.log(mode);
-    }
   }
 
   setFilePath(path) {
