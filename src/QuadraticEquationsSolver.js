@@ -60,7 +60,7 @@ class QuadraticEquationsSolver {
   }
 
   async getValuesFromFile(path) {
-    const pattern = /^(-?\d*\.?\d*\s){2}-?\d*\.?\d*\n$/g;
+    const pattern = /^(-?\d*\.?\d*\s){2}-?\d*\.?\d*\r?\n$/g;
     const content = await fs.readFile(path, 'utf-8');
     if (!pattern.test(content)) {
       throw new Error('Invalid file format!');
